@@ -1,0 +1,79 @@
+#!/bin/bash
+#Author: kokou Adenyo
+#Description: script for installtion of jenkins
+#Date: march 7,2022
+
+
+echo "The installation will bigin soon please be patient..." 
+echo
+echo "let's install java"
+sudo yum install java-1.8.0-openjdk-devel
+echo
+sleep 2
+if
+[ $? -eq 0 ]
+then
+echo "let' enable the jenkins repository"
+sleep 2
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo 
+fi
+if
+[ $? -ne 0 ]
+then
+echo "command non found error,install wget"
+sleep 2
+sudo yum install wget -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+ fi
+ echo
+if
+[ $? -eq 0 ]
+then
+sudo sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/jenkins.repo
+fi
+ if
+ [ $? -eq 0 ]
+then
+echo "Install the latest stable version of Jenkins"
+sleep 2
+sudo yum install jenkins
+fi
+if
+ [ $? -eq 0 ]
+then
+echo
+echo "let's start the jenkins service"
+sleep 2
+sudo systemctl start jenkins 
+fi
+echo
+if
+ [ $? -eq 0 ]
+then
+echo "Check the status"
+sleep 2
+sudo systemctl status jenkins
+fi
+echo
+if
+ [ $? -eq 0 ]
+then
+echo "enable the Jenkins service to start on system boot"
+sleep 2
+sudo systemctl enable jenkins
+fi
+echo
+if
+ [ $? -eq 0 ]
+then
+echo "Adjust the firewall"
+sleep 2
+sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp 
+sudo firewall-cmd --reload
+fi
+echo
+if
+ [ $? -eq 0 ]
+then
+echo "jenkins is installed successfully"
+fi
